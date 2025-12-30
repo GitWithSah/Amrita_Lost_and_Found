@@ -1,3 +1,4 @@
+import dotenv
 from flask import Flask, render_template, request, redirect, session
 import sqlite3 #dbname
 import smtplib
@@ -5,7 +6,7 @@ import random
 import os
 from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
-
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = "secretkey"
