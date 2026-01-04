@@ -296,6 +296,81 @@ def delete_lost_item(item_id):
 
     return redirect("/view-lost-items")
 
+@app.route("/claim-item/<int:item_id>")
+def claim_item(item_id):
+    if "role" not in session or session["role"] != "admin":
+        return redirect("/")
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM found_items WHERE id=?", (item_id,))
+    item = cursor.fetchone()
+
+    if not item:
+        return redirect("/view-items")
+
+    return render_template("claim_item.html", item_id=item_id)
+
+@app.route("/claim-item/<int:item_id>", methods=["POST"])
+def claim_item_post(item_id):
+    if "role" not in session or session["role"] != "admin":
+        return redirect("/")
+
+    student_name = request.form["student_name"]
+    reg_no = request.form["registration_number"]
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    # Get item details
+    cursor.execute("SELECT item_name, description, location, image FROM found_items WHERE id=?", (item_id,))
+    item = cursor.fetchone()
+
+    if not item:
+        return redirect("/view-items")
+
+    # Insert into claimed_items
+    cursor.execute("""
+        INSERT INTO claimed_items
+        (item_name, description, location, image, student_name, registration_number)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, (
+        item[0], item[1], item[2], item[3],
+        student_name, reg_no
+    ))
+
+    # Delete from found_items
+    cursor.execute("DELETE FROM found_items WHERE id=?", (item_id,))
+    conn.commit()
+
+    return redirect("/view-items")
+
+@app.route("/claimed-items")
+def claimed_items():
+    if "role" not in session or session["role"] != "admin":
+        return redirect("/")
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM claimed_items ORDER BY claimed_at DESC")
+    items = cursor.fetchall()
+
+    return render_template("claimed_items.html", items=items)
+
+@app.route("/delete-claimed-item/<int:item_id>")
+def delete_claimed_item(item_id):
+    if "role" not in session or session["role"] != "admin":
+        return redirect("/")
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM claimed_items WHERE id=?", (item_id,))
+    conn.commit()
+
+    return redirect("/claimed-items")
+
 @app.route("/search")
 def search_items():
     if "role" not in session or session["role"] != "student":

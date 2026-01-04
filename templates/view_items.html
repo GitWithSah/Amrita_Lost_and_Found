@@ -49,6 +49,11 @@
             onclick="return confirm('Delete this item?');">
             Delete
             </a>
+            <a href="/claim-item/{{ item[0] }}"
+            class="btn btn-outline"
+            onclick="return confirm('Claim this item?');">
+            Claim
+            </a>
         </td>
     </tr>
     {% endfor %}
