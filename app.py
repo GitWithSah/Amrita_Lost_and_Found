@@ -1,4 +1,3 @@
-import dotenv
 from flask import Flask, render_template, request, redirect, session
 import sqlite3 
 import smtplib
@@ -10,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = "secretkey"
+app.secret_key = os.getenv("SECRET_KEY")
 
 def send_otp(email, otp):
     print("OTP for", email, "is", otp)
