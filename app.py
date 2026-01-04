@@ -1,6 +1,6 @@
 import dotenv
 from flask import Flask, render_template, request, redirect, session
-import sqlite3 #dbname
+import sqlite3 
 import smtplib
 import random
 import os
