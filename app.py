@@ -30,6 +30,8 @@ def send_otp(email, otp):
 def valid_student_email(email):
     return email.startswith("bl.") and email.endswith("@bl.students.amrita.edu")
 
+def allowed_file(filename):
+    return filename.lower().endswith((".jpg", ".jpeg", ".png"))
 
 def get_db():
     return sqlite3.connect("database.db")
@@ -216,6 +218,12 @@ def upload_item_post():
     description = request.form["description"]
     location = request.form["location"]
     image = request.files["image"]
+
+    if not allowed_file(image.filename):
+        return render_template(
+            "upload_item.html",
+            error="Only JPG/JPEG/PNG images allowed"
+        )
 
     filename = secure_filename(image.filename)
     image_path = os.path.join("static/uploads", filename)
@@ -451,6 +459,12 @@ def report_found_post():
     location = request.form["location"]
     image = request.files["image"]
 
+    if not allowed_file(image.filename):
+        return render_template(
+            "report_found.html",
+            error="Only JPG/JPEG/PNG images allowed"
+        )
+    
     filename = secure_filename(image.filename)
     image.save(os.path.join("static/uploads", filename))
 
