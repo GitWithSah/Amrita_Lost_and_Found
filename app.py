@@ -52,7 +52,7 @@ def login_user():
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute("""
-        SELECT password, role, is_verified FROM users
+        SELECT name, password, role, is_verified FROM users
         WHERE email=?
     """, (email,))
     user = cursor.fetchone()
@@ -65,10 +65,10 @@ def login_user():
             redirect_url="/login",
             show_forgot=True
         )
-
-    stored_hash = user[0]
-    role = user[1]
-    is_verified = user[2]
+    student_name = user[0]
+    stored_hash = user[1]
+    role = user[2]
+    is_verified = user[3]
 
     #  check hashed password
     if not check_password_hash(stored_hash, password):
@@ -88,7 +88,7 @@ def login_user():
             message="Please verify your email before logging in.",
             redirect_url="/register"
         )
-
+    session["name"] = student_name
     session["email"] = email
     session["role"] = role
 
@@ -344,7 +344,7 @@ def claim_item_post(item_id):
         VALUES (?, ?, ?, ?, ?, ?)
     """, (
         item[0], item[1], item[2], item[3],
-        student_name, reg_no
+        student_name, reg_no 
     ))
 
     # Delete from found_items
@@ -382,7 +382,11 @@ def delete_claimed_item(item_id):
 def student_dashboard():
     if "role" not in session or session["role"] != "student":
         return redirect("/")
-    return render_template("student_dashboard.html")
+    
+    return render_template(
+        "student_dashboard.html",
+        student_name=session.get("name")
+    )
 
 @app.route("/search")
 def search_items():
