@@ -393,7 +393,7 @@ body.dark-mode textarea {
 }
 
 body.dark-mode .navbar {
-    background-color: var(--amrita-maroon-dark);
+    background-color: var(--amrita-maroon);
 }
 
 body.dark-mode th {
