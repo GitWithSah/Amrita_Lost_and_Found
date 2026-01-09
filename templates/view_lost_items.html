@@ -10,9 +10,9 @@
     {% include "navbar.html" %}
 <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
 
-<h2>Reported Lost Items</h2>
+<h2 class="navGap">Reported Lost Items</h2>
 
-<table border="1" cellpadding="10">
+<table class="tab" border="1" cellpadding="10">
     <tr>
         <th>Student Email</th>
         <th>Item Name</th>
@@ -42,7 +42,8 @@
 <div class="back-center">
     <a href="/admin" class="btn">Back to Dashboard</a>
 </div>
-
+{% include "footer.html" %}
+<script src="{{ url_for('static', filename='js/change.js') }}"></script>
 
 </body>
 </html>

@@ -9,7 +9,7 @@
 
 {% include "navbar.html" %}
 
-<h1 class="page-title">Search Found Items</h1>
+<h1 class="page-title navGap">Search Found Items</h1>
 
 <div class="form-wrapper">
     <form method="get">
@@ -26,7 +26,7 @@
 {% endif %}
 
 <div class="dashboard">
-    <table>
+    <table class="tab">
         <tr>
             <th>Item Name</th>
             <th>Description</th>
@@ -81,7 +81,8 @@
     <img id="modalImage">
 </div>
 <script src="{{ url_for('static', filename='js/image_modal.js') }}"></script>
-
+{% include "footer.html" %}
+<script src="{{ url_for('static', filename='js/change.js') }}"></script>
 
 </body>
 </html>
